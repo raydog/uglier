@@ -1,0 +1,27 @@
+{
+  "name": "uglier",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "coverage": "nyc -r html -r text-summary ava"
+  },
+  "author": "Ray Myers",
+  "license": "MIT",
+  "dependencies": {
+    "babylon": "6.16.1",
+    "lodash": "4.17.4",
+    "jsondiffpatch": "0.2.4"
+  },
+  "devDependencies": {
+    "ava": "0.19.1",
+    "nyc": "10.2.0"
+  },
+  "ava": {
+    "verbose": true,
+    "files": [
+      "test/**/*.test.js"
+    ]
+  }
+}
