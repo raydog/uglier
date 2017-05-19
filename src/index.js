@@ -1,16 +1,19 @@
 var parser = require('./parser');
 var astHandler = require('./astHandler');
 var formatter = require('./formatter');
-// var jsondiffpatch = require('jsondiffpatch');
-// var util = require('util');
 var _ = require('lodash');
 
-// var fname = "/users/Ray/webflow/lib/helpers/util.js";
-// "/users/Ray/webflow/models/dynamoDrivers/mongodb.js";
-// var fname = "/users/Ray/webflow/lib/dnsUtils.js";
 
+exports.mangleFile = mangleFile;
 exports.mangleCode = mangleCode;
 exports.cleanAST = cleanAST;
+
+
+function mangleFile(fname, opts) {
+  return parser.parseFile(fname)
+    .then(ast => astHandler.gurgitateAST(ast))
+    .then(codez => formatter.mangle(codez, opts));
+}
 
 
 // Mangles code with options. Throws if something's wrong.
