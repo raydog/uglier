@@ -1121,14 +1121,19 @@ function _unknownASTLog(ast) {
 function _stringLiteral(str) {
   str = String(str);
   // TODO: Single vs Double quote switching...
-  return "'" + str.replace(/["'\\\b\f\n\r\t\u2028\u2029\v]/g, _replaceChar) + "'";
+  return "'" + str.replace(/[\x00-\x1f"'\\\b\f\n\r\t\u2028\u2029\v]/g, _replaceChar) + "'";
 }
 
 function _replaceChar(ch) {
-  return STR_CHAR_LOOKUP[ch];
+  var code = ch.charCodeAt(0);
+  return (code <= 0x1f)
+    ? '\\u' + _.padStart(code.toString(16), 4, '0')
+    : STR_CHAR_LOOKUP[ch];
 }
 
 var STR_CHAR_LOOKUP = {
+  "\u0000": "\\0",
+
   "\"": "\\\"",
   "\'": "\\\'",
   "\\": "\\\\",
