@@ -15,6 +15,7 @@ var world = "Earth";
   NaN,
   "foo",
   'bar',
+  '\u001b[94m',
   "this string isn't going to be short. Actually, it is quite long. The goal is to make it unwrappable, to trigger some other test case. Basically, I just want to make sure that at least one line in all these tests is unwrappable. Since we no longer chunk strings into shorter ones (since that changes the parse tree...), this one line will have to do. Yay.",
   'this string is "shorter". But still not entirely short.',
   /this is a regular expression/i,
