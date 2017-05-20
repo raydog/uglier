@@ -5,7 +5,7 @@ exports.mangle = mangle;
 
 
 function mangle(codez, conf) {
-  var conf = _.defaults(conf, { width: 100, minSpace: 3 });
+  var conf = _.defaults(conf, { width: 100, minSpace: 3, quote: '"', indent: "\t\t" });
   return codez
     .map(line => fuckUpLine(line, conf))
     .join("\n");
@@ -14,10 +14,15 @@ function mangle(codez, conf) {
 function fuckUpLine(line, conf) {
   var lines = [];
   var width = conf.width;
-  var minSpace = conf.minSpace;
   var indent = "";
+
+  var confIndentWidth = (conf.indent.charAt(0) === '\t')
+    ? conf.indent.length * 8
+    : conf.indent.length;
+
   while (line.length) {
-    var newConf = { width, minSpace };
+    var newConf = _.clone(conf);
+    newConf.width = width;
     // Keep adding tokens until those tokens can no longer fit on a line with the current char spacing:
     for (var i=1; i<=line.length && _canFit(line.slice(0,i), newConf); i++) {
       // pass
@@ -25,8 +30,8 @@ function fuckUpLine(line, conf) {
     i = Math.max(1, i-1);
     lines.push(indent + _spaceOut(line.slice(0, i), newConf));
     line = line.slice(i);
-    indent = "    ";
-    width = conf.width - indent.length;
+    indent = conf.indent;
+    width = conf.width - confIndentWidth;
   }
   return lines.join("\n");
 }
@@ -42,7 +47,8 @@ function _canFit(line, conf) {
 // Not only flattens a line, but will add spaces to the ends of tokens that
 // should be kept separate:
 function _flatten(line, conf) {
-  var flat = _.flattenDeep(line);
+  var flat = _.flattenDeep(line)
+    .map(_convertQuotes.bind(null, conf));
   
   // If there's some minimum on spacing, just depend on that:
   if (conf.minSpace) { return flat; }
@@ -99,4 +105,11 @@ function _spaceOut(line, conf) {
       return word + suffix;
     })
     .join("");
+}
+
+function _convertQuotes(conf, word) {
+  var f = word.charAt(0), l = word.charAt(word.length-1), q = conf.quote;
+  return (f === l && f === "'")
+    ? q + word.slice(1, -1) + q
+    : word;
 }

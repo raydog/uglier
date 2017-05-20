@@ -1120,7 +1120,6 @@ function _unknownASTLog(ast) {
 
 function _stringLiteral(str) {
   str = String(str);
-  // TODO: Single vs Double quote switching...
   return "'" + str.replace(/[\x00-\x1f"'\\\b\f\n\r\t\u2028\u2029\v]/g, _replaceChar) + "'";
 }
 
