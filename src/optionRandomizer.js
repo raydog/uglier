@@ -77,7 +77,7 @@ function bareASTString(ast) {
 
       if (nodeVal) {
         out += onNode(val);
-      } else if (arrayVal) {
+      } else {
         out += onArray(val);
       }
     });

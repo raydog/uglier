@@ -17,7 +17,7 @@ function mangleFile(fname, opts) {
   var confP = astP.then(ast => opts || optionRandomizer.fromAST(ast));
 
   return Promise.all([codeP, confP])
-    .then(res => (console.log(">>> %j", res[1]), formatter.mangle(res[0], res[1])));
+    .then(res => formatter.mangle(res[0], res[1]));
 }
 
 
@@ -27,7 +27,7 @@ function mangleCode(code, opts) {
   var ast   = parser.parseJS(code);
   var conf  = opts || optionRandomizer.fromAST(ast);
   var codez = astHandler.gurgitateAST(ast);
-  return formatter.mangle(codez, opts);
+  return formatter.mangle(codez, conf);
 }
 
 
