@@ -1,5 +1,6 @@
 const uglier = require('./');
 const Config = require('./config');
+const fs = require('fs');
 const globby = require('globby');
 const chalk = require('chalk');
 const _ = require('lodash');
@@ -63,7 +64,7 @@ function loadPatterns(patterns) {
 
 function mangleWith(config) {
   return (files) => {
-    var handler = new TrashWriter(files);
+    var handler = new TrashPrinter(files);
     return mapLimit(files, FILE_PARALLELISM, path => trashFile(path, handler))
       .then(() => handler.onDone());
   }
@@ -157,6 +158,10 @@ class TrashWriter {
 
     console.log("Done! %d total %s: %d ok. %d fail", this.total, pluralFile, this.ok, this.fail);
   }
+}
+
+function _writeFileP(path, contents) {
+
 }
 
 if (require.main === module) {
