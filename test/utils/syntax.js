@@ -13,14 +13,14 @@ exports.fixtures = fs.readdirSync(path.join(__dirname, "../fixtures"))
  * original code:
  */
 
-function testFactory(t, path, width) {
+function testFactory(t, path, conf) {
   return _loadTestFile(path)
     .then(code => {
       var codeOriginal = code;
       // console.log("--------");
       // console.log(codeOriginal);
       // console.log("--------");
-      var codeMangled = uglier.mangleCode(codeOriginal, { width });
+      var codeMangled = uglier.mangleCode(codeOriginal, conf);
       // console.log(codeMangled);
       // console.log("--------");
       // ASTs are equal:
