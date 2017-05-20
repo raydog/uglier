@@ -71,7 +71,7 @@ function mangleWith(config) {
 }
 
 function trashFile(path, handler) {
-  return uglier.mangleFile(path, { width: 80 })
+  return uglier.mangleFile(path, null)
     .then(code => handler.onCode(path, code))
     .catch(err => handler.onError(path, err));
 }
