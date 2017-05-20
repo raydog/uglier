@@ -1,6 +1,7 @@
 var parser = require('./parser');
 var astHandler = require('./astHandler');
 var formatter = require('./formatter');
+var optionRandomizer = require('./optionRandomizer');
 var _ = require('lodash');
 
 
@@ -10,17 +11,22 @@ exports.cleanAST = cleanAST;
 
 
 function mangleFile(fname, opts) {
-  return parser.parseFile(fname)
-    .then(ast => astHandler.gurgitateAST(ast))
-    .then(codez => formatter.mangle(codez, opts));
+  var astP  = parser.parseFile(fname);
+
+  var codeP = astP.then(ast => astHandler.gurgitateAST(ast));
+  var confP = astP.then(ast => opts || optionRandomizer.fromAST(ast));
+
+  return Promise.all([codeP, confP])
+    .then(res => (console.log(">>> %j", res[1]), formatter.mangle(res[0], res[1])));
 }
 
 
 // Mangles code with options. Throws if something's wrong.
+// If opts is omitted (or null) it's generated from the AST through Magic™.
 function mangleCode(code, opts) {
   var ast   = parser.parseJS(code);
+  var conf  = opts || optionRandomizer.fromAST(ast);
   var codez = astHandler.gurgitateAST(ast);
-
   return formatter.mangle(codez, opts);
 }
 
