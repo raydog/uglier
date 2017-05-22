@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "ava",
-    "coverage": "nyc -r html -r text-summary ava"
+    "coverage": "nyc -a -r html -r text-summary ava"
   },
   "author": "Ray Myers",
   "license": "MIT",

@@ -14,7 +14,7 @@ var origAST = null, newAST = null;
 
 function main(args) {
   var c = new Config()
-    .loadPackage(packageJSON)
+    // .loadPackage(packageJSON)
     .loadArgv(args);
 
   if (!c.patterns.length) {
