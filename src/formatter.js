@@ -16,9 +16,10 @@ function fuckUpLine(line, conf) {
   var width = conf.width;
   var indent = "";
 
-  var confIndentWidth = (conf.indent.charAt(0) === '\t')
-    ? conf.indent.length * 8
-    : conf.indent.length;
+  // Not 100% accurate for tabs (at least not in my term) but whatever:
+  var confIndentWidth = conf.indent.split("")
+    .map(x => x === '\t' ? 8 : 1)
+    .reduce((a,b) => a+b, 0);
 
   while (line.length) {
     var newConf = _.clone(conf);
