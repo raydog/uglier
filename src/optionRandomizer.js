@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 
 exports.fromAST = fromAST;
+exports._test = {
+  bareASTString
+};
 
 
 // SHA 256 assignments:
