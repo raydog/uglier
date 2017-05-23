@@ -64,13 +64,17 @@ function loadPatterns(patterns) {
 
 function mangleWith(config) {
   return (files) => {
-    var handler = new TrashPrinter(files);
+    var handler = (config.mode === "print")
+      ? new TrashPrinter(files)
+      : new TrashWriter(files);
     return mapLimit(files, FILE_PARALLELISM, path => trashFile(path, handler))
       .then(() => handler.onDone());
   }
 }
 
 function trashFile(path, handler) {
+  // NOTE: This is specifically structured so that errors in onCode are passed
+  // along to onError. We should be careful to not double-count those cases.
   return uglier.mangleFile(path, null)
     .then(code => handler.onCode(path, code))
     .catch(err => handler.onError(path, err));
@@ -135,8 +139,13 @@ class TrashWriter {
   }
 
   onCode(path, code) {
-    this.ok++;
-    this._printStatus();
+    // NOTE: we don't handle the error case here, so that the error will be passed along,
+    // and then handled by onError below.
+    return _writeFileP(path, code)
+      .then(() => {
+        this.ok++;
+        this._printStatus();
+      });
   }
 
   onError(path, err) {
@@ -161,7 +170,12 @@ class TrashWriter {
 }
 
 function _writeFileP(path, contents) {
-
+  return new Promise((resolve, reject) => {
+    fs.writeFile(path, contents, { encoding: 'utf8' }, function (err) {
+      if (err) { return reject(err); }
+      resolve();
+    });
+  });
 }
 
 if (require.main === module) {

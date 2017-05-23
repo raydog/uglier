@@ -23,6 +23,7 @@ test("Parses -o", argvTestFactory, ["-o"], [], "overwrite", null);
 test("Parses basic patterns", argvTestFactory, ["a", "-o", "b"], ["a", "b"], "overwrite", null);
 test("Parses more patterns", argvTestFactory, ["-o", "src/**/*.js"], ["src/**/*.js"], "overwrite", null);
 
+
 function packageTestFactory(t, packageJSON, patterns, mode) {
   var c = new Config().loadPackage(packageJSON);
   t.deepEqual(c.patterns, patterns);
