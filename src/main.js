@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const uglier = require('./');
 const Config = require('./config');
 const fs = require('fs');

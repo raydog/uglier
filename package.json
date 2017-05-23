@@ -7,6 +7,9 @@
     "test": "ava",
     "coverage": "nyc -a -r html -r text-summary ava"
   },
+  "bin": {
+    "uglier": "./src/main.js"
+  },
   "author": "Ray Myers",
   "license": "MIT",
   "dependencies": {
