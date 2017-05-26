@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "ava": "0.19.1",
-    "nyc": "10.3.2"
+    "nyc": "10.3.2",
+    "temp": "0.8.3"
   },
   "ava": {
     "verbose": true,
