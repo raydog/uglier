@@ -1,5 +1,5 @@
-const fs = require('fs');
 const babylon = require("babylon");
+const files = require('./files');
 const _ = require('lodash');
 
 
@@ -8,7 +8,7 @@ exports.parseJS = parseJS;
 
 
 function parseFile(fname) {
-  return readFileP(fname)
+  return files.readFile(fname)
     .then(parseJS);
 }
 
@@ -69,14 +69,4 @@ function formatSyntaxError(code, err) {
     var out = _.padStart(String(lineno), maxlen) + sep + str;
     return out;
   }
-}
-
-
-function readFileP(fname) {
-  return new Promise(function (resolve, reject) {
-    fs.readFile(fname, { encoding: 'utf8' }, function (err, data) {
-      if (err) { return reject(err); }
-      resolve(data);
-    });
-  });
 }

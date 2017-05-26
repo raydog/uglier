@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const uglier = require('../../src');
+const readFile = require('../../src/files').readFile;
 
 exports.testFactory = testFactory;
 exports.fixtures = fs.readdirSync(path.join(__dirname, "../fixtures"))
@@ -14,7 +15,7 @@ exports.fixtures = fs.readdirSync(path.join(__dirname, "../fixtures"))
  */
 
 function testFactory(t, path, conf) {
-  return _loadTestFile(path)
+  return readFile(path)
     .then(code => {
       var codeOriginal = code;
       // console.log("--------");
@@ -26,13 +27,4 @@ function testFactory(t, path, conf) {
       // ASTs are equal:
       t.deepEqual(uglier.cleanAST(codeOriginal), uglier.cleanAST(codeMangled));
     });
-}
-
-function _loadTestFile(path) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, { encoding: 'utf8' }, (err, data) => {
-      if (err) { return reject(err); }
-      resolve(data);
-    });
-  });
 }
