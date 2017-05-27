@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "ava",
-    "coverage": "nyc -a -r html -r text-summary ava"
+    "coverage": "nyc -a -r html -r text-summary ava",
+    "coveralls": "nyc -a -r text-lcov ava | coveralls"
   },
   "bin": {
     "uglier": "./src/main.js"
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "ava": "0.19.1",
+    "coveralls": "2.13.1",
     "nyc": "10.3.2",
     "temp": "0.8.3"
   },
