@@ -1,7 +1,4 @@
 language: node_js
 node_js:
   - "node"
-  - "iojs"
   - "6"
-  - "5"
-  - "4"
