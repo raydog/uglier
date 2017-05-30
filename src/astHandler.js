@@ -97,11 +97,15 @@ function descendArray(state, astArray, sep) {
 
 var HANDLERS = {
   "File": function parseFile(state, ast) {
+    state.newLine();
+    if (ast.sheBang) {
+      state.push(ast.sheBang);
+      state.newLine();
+    }
     descend(state, ast.program);
   },
   "Program": function parseProgram(state, ast) {
     state.depth = 0; // << Ensure zero, so that we can use this depth as a reference...
-    state.newLine();
     if (ast.directives.length) {
       descendArray(state, ast.directives);
       state.newLine();
