@@ -1,8 +1,8 @@
 {
   "name": "uglier",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "ava",
     "coverage": "nyc -a -r html -r text-summary ava",
@@ -13,7 +13,6 @@
   },
   "author": "Ray Myers",
   "license": "MIT",
-  "main": "src/index.js",
   "dependencies": {
     "babylon": "6.17.1",
     "chalk": "1.1.3",
