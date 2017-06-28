@@ -42,7 +42,7 @@ There. Much better!
 
 ## Inflicting Maximum Damage (AKA: Running)
 
-Usage: `ugler [options...] <glob> ...`
+Usage: `uglier [options...] <glob> ...`
 
 #### Options:
 - `<glob>`<br>
