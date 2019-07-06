@@ -1,4 +1,4 @@
-const test = require('ava').test;
+const test = require('ava');
 const astHandler = require('../src/astHandler');
 const parser = require('../src/parser');
 

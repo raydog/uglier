@@ -28,7 +28,7 @@ function hasOptions(opts: { optKey?: string, optVal: ?string }):number {
 }
 
 const util = require('util');
-const log = (msg:string, obj:any):void => console.log(
+const otherLog = (msg:string, obj:any):void => console.log(
   new Date().toISOString(),
   msg,
   util.inspect(obj, { colors: true, depth: 10 })

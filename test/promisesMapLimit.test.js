@@ -1,4 +1,4 @@
-const test = require('ava').test;
+const test = require('ava');
 const mapLimit = require('../src/promises').mapLimit;
 const _ = require('lodash');
 

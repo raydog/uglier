@@ -1,4 +1,4 @@
-const test = require('ava').test;
+const test = require('ava');
 const path = require('path');
 const spawn = require('child_process').spawn;
 const temp = require('temp').track();

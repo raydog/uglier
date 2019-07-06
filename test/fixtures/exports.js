@@ -1,3 +1,4 @@
+const a = "hello", b = "world", c = 1234;
 export { a, b, c };
 export { a as foo, b as bar };
 export let pi = Math.PI;

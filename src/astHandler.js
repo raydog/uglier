@@ -98,14 +98,14 @@ function descendArray(state, astArray, sep) {
 var HANDLERS = {
   "File": function parseFile(state, ast) {
     state.newLine();
-    if (ast.sheBang) {
-      state.push(ast.sheBang);
-      state.newLine();
-    }
     descend(state, ast.program);
   },
   "Program": function parseProgram(state, ast) {
     state.depth = 0; // << Ensure zero, so that we can use this depth as a reference...
+    if (ast.interpreter) {
+      state.push("#!" + ast.interpreter.value);
+      state.newLine();
+    }
     if (ast.directives.length) {
       descendArray(state, ast.directives);
       state.newLine();
@@ -297,15 +297,11 @@ var HANDLERS = {
     descend(state, ast.body);
   },
   "ForOfStatement": function parseForOfStatement(state, ast) {
-    state.push("for", "(");
-    state.holdSemis(() => descend(state, ast.left));
-    state.push("of");
-    descend(state, ast.right);
-    state.push(")");
-    descend(state, ast.body);
-  },
-  "ForAwaitStatement": function parseForAwaitStatement(state, ast) {
-    state.push("for", "await", "(");
+    if (ast.await) {
+      state.push("for", "await", "(");
+    } else {
+      state.push("for", "(");
+    }
     state.holdSemis(() => descend(state, ast.left));
     state.push("of");
     descend(state, ast.right);
@@ -334,6 +330,13 @@ var HANDLERS = {
     state.push(")");
     if (ast.returnType) {
       descend(state, ast.returnType);
+    }
+    if (ast.predicate) {
+      // Ugh.
+      if (!ast.returnType) {
+        state.push(":");
+      }
+      descend(state, ast.predicate);
     }
     descend(state, ast.body);
   },
@@ -822,9 +825,7 @@ var HANDLERS = {
   },
   "DeclaredPredicate": function parseDeclaredPredicate(state, ast) {
     state.push("%checks");
-    state.push("(");
-    descend(state, ast.expression);
-    state.push(")");
+    descend(state, ast.value);
   },
   "InferredPredicate": function checkInferredPredicate(state, ast) {
     state.push("%checks");
@@ -838,7 +839,7 @@ var HANDLERS = {
   "NumberTypeAnnotation": function parseNumberTypeAnnotation(state, ast) {
     state.push("number");
   },
-  "NumericLiteralTypeAnnotation": function parseNumericLiteralTypeAnnotation(state, ast) {
+  "NumberLiteralTypeAnnotation": function parseNumberLiteralTypeAnnotation(state, ast) {
     HANDLERS.NumericLiteral(state, ast);
   },
   "StringTypeAnnotation": function parseStringTypeAnnotation(state, ast) {
@@ -853,7 +854,7 @@ var HANDLERS = {
   "BooleanLiteralTypeAnnotation": function parseBooleanLiteralTypeAnnotation(state, ast) {
     HANDLERS.BooleanLiteral(state, ast);
   },
-  "ExistentialTypeParam": function parseExistentialTypeParam(state, ast) {
+  "ExistsTypeAnnotation": function parseExistsTypeAnnotation(state, ast) {
     state.push("*");
   },
   "ThisTypeAnnotation": function parseThisTypeAnnotation(state, ast) {
@@ -933,6 +934,9 @@ var HANDLERS = {
     state.push(")");
   },
   "FunctionTypeAnnotation_DotHack": function parseFunctionTypeAnnotation(state, ast) {
+    if (!ast.returnType) {
+      _unknownASTLog(ast);
+    }
     if (ast.typeParameters) {
       descend(state, ast.typeParameters);
     }
@@ -982,8 +986,8 @@ var HANDLERS = {
   },
   "ObjectTypeIndexer": function parseObjectTypeIndexer(state, ast) {
     _assertOrUnknown(!ast.static, ast);
-    _assertOrUnknown(!ast.variance || ["minus", "plus"].includes(ast.variance), ast);
-    switch (ast.variance) {
+    _assertOrUnknown(!ast.variance || ["minus", "plus"].includes(ast.variance.kind), ast);
+    switch (ast.variance && ast.variance.kind) {
       case "minus": state.push("-"); break;
       case "plus":  state.push("+"); break;
     }
@@ -998,8 +1002,8 @@ var HANDLERS = {
   },
   "ObjectTypeProperty": function parseObjectTypeProperty(state, ast) {
     _assertOrUnknown(!ast.static, ast);
-    _assertOrUnknown(!ast.variance || ["minus", "plus"].includes(ast.variance), ast);
-    switch (ast.variance) {
+    _assertOrUnknown(!ast.variance || ["minus", "plus"].includes(ast.variance.kind), ast);
+    switch (ast.variance && ast.variance.kind) {
       case "minus": state.push("-"); break;
       case "plus":  state.push("+"); break;
     }
@@ -1007,8 +1011,12 @@ var HANDLERS = {
     if (ast.optional) {
       state.push("?");
     }
-    state.push(":");
-    descend(state, ast.value);
+    if (ast.method) {
+      HANDLERS.FunctionTypeAnnotation_DotHack(state, ast.value);
+    } else {
+      state.push(":");
+      descend(state, ast.value);
+    }
   },
   "TypeAlias": function parseTypeAlias(state, ast) {
     state.push("type");
@@ -1066,12 +1074,12 @@ var HANDLERS = {
   "DeclareFunction": function parseDeclareFunction(state, ast) {
     // Ugh. Babylon really fouls up the AST here, and this takes a number of hacks to work:
     var name = _.get(ast, "id.name");
-    var func = _.get(ast, "id.typeAnnotation.typeAnnotation");
-    var pred = _.get(ast, "id.typeAnnotation.predicate");
+    var func = _.get(ast, "id.typeAnnotation");
+    var pred = ast.predicate;
     _assertOrUnknown(name, ast);
-    _assertOrUnknown(func, ast);
+    _assertOrUnknown(func && func.type === "TypeAnnotation", ast);
     state.push("declare", "function", name);
-    HANDLERS.FunctionTypeAnnotation_DotHack(state, func);
+    HANDLERS.FunctionTypeAnnotation_DotHack(state, func.typeAnnotation);
     if (pred) {
       descend(state, pred);
     }

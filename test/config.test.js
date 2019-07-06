@@ -1,4 +1,4 @@
-const test = require('ava').test;
+const test = require('ava');
 const Config = require('../src/config');
 const _ = require('lodash');
 

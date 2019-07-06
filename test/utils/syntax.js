@@ -18,12 +18,16 @@ function testFactory(t, path, conf) {
   return readFile(path)
     .then(code => {
       var codeOriginal = code;
+
       // console.log("--------");
       // console.log(codeOriginal);
       // console.log("--------");
+
       var codeMangled = uglier.mangleCode(codeOriginal, conf);
+
       // console.log(codeMangled);
       // console.log("--------");
+
       // ASTs are equal:
       t.deepEqual(uglier.cleanAST(codeOriginal), uglier.cleanAST(codeMangled));
     });

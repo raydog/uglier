@@ -10,5 +10,5 @@ type Bar = {
 };
 
 interface StaticCallProp {
-  static (c: boolean): void;
+  foo(c: boolean): void;
 }

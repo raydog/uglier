@@ -30,7 +30,7 @@ for ( let  val  of  fibon ( 89 ) ) { ( console . log ) ( '>>' , val );}
 There. Much better!
 
 "Features" include:
-- Supports most Javascript features supported by Babylon. Also supports many Flow types.
+- Supports most Javascript features supported by Babel's parser. Also supports many Flow types.
 - Convenient globbing features make it easy to overhaul an entire repo.
 - All comments are removed. I mean, why would anyone spend precious bytes of storage on code that doesn't *DO* anything?
 - Several formatting features (like the number of spaces when indenting or the target characters per line) are determined by a hash of the file's AST structure. So minor changes (variable names, comments, spacing) won't change anything. But adding another variable would cause the whole file to update. Take that, git blame!

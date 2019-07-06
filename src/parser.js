@@ -1,13 +1,10 @@
-const babylon = require("babylon");
+const parser = require("@babel/parser");
 const files = require('./files');
 const _ = require('lodash');
 
 
 exports.parseFile = parseFile;
 exports.parseJS = parseJS;
-
-
-const SHE_BANG_RE = /^#!/;
 
 
 function parseFile(fname) {
@@ -18,28 +15,25 @@ function parseFile(fname) {
 function parseJS(text) {
   // This bit pulled from the 'prettier' source:
   try {
-    var out = babylon.parse(text, {
+    var out = parser.parse(text, {
       sourceType: "module",
       allowImportExportEverywhere: false,
       allowReturnOutsideFunction: false,
       strictMode: false, // Allows 'with' statements, cause that's a good idea. </sarcasm>
       plugins: [
-        // "jsx", << TODO
-        "flow",
-        "doExpressions",
-        "objectRestSpread",
-        "decorators",
-        "classProperties",
-        "exportExtensions",
         "asyncGenerators",
+        "classProperties",
+        ["decorators", { decoratorsBeforeExport: true }],
+        "doExpressions",
+        "dynamicImport",
+        "exportExtensions",
+        "flow",
         "functionBind",
         "functionSent",
-        "dynamicImport"
+        // "jsx", // << TODO....
+        "objectRestSpread",
       ]
     });
-    if (SHE_BANG_RE.test(text)) {
-      return _applySheBangHack(out);
-    }
     return out;
 
   } catch (ex) {
@@ -48,16 +42,6 @@ function parseJS(text) {
     }
     throw ex;
   }
-}
-
-// Files that start with #! were meant to be executed as scripts, but Babylon parses
-// that first line as a simple comment, so we can't tell the difference between
-// "// /usr/bin/env node" and "#!/usr/bin/env node". This augments
-function _applySheBangHack(ast) {
-  var firstComment = ast.comments[0].value;
-  var line = "#!" + firstComment;
-  ast.sheBang = line;
-  return ast;
 }
 
 
