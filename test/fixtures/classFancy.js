@@ -6,6 +6,10 @@ const klass = class Blah {
     this.b = b;
   }
 
+  static thing(n) {
+    return Blah.val * n;
+  }
+
   async whatever() {
     var a = await wasteOfTime();
     return 1;
@@ -18,6 +22,10 @@ const klass = class Blah {
   [foo + bar]() {
     console.log(this);
     return this.a * this.b;
+  }
+
+  static [bar + foo]() {
+    return "!?!";
   }
 };
 
