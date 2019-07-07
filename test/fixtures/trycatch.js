@@ -20,3 +20,10 @@ try {
   console.log("Done", thing);
   throw new Error("Finally");
 }
+
+// Optional catch proposal:
+try {
+  throw new Error("This is a problem");
+} catch {
+  console.log("That was a problem");
+}

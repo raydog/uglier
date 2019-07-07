@@ -268,9 +268,12 @@ var HANDLERS = {
     }
   },
   "CatchClause": function parseCatchClause(state, ast) {
-    state.push("catch", "(");
-    descend(state, ast.param);
-    state.push(")");
+    state.push("catch");
+    if (ast.param) {
+      state.push("(");
+      descend(state, ast.param);
+      state.push(")");
+    }
     descend(state, ast.body);
   },
   "WhileStatement": function parseWhileStatement(state, ast) {
