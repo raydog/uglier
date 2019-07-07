@@ -22,6 +22,7 @@ function parseJS(text) {
       strictMode: false, // Allows 'with' statements, cause that's a good idea. </sarcasm>
       plugins: [
         "asyncGenerators",
+        "bigInt",
         "classProperties",
         ["decorators", { decoratorsBeforeExport: true }],
         "doExpressions",

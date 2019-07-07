@@ -66,6 +66,7 @@ const SIMPLE_TYPES = {
   StringLiteral: 1,
   BooleanLiteral: 1,
   NumericLiteral: 1,
+  BigIntLiteral: 1,
   Super: 1,
   Import: 1,
   ThisExpression: 1,
@@ -149,6 +150,9 @@ var HANDLERS = {
     state.push(ast.value ? "true" : "false");
   },
   "NumericLiteral": function parseNumericLiteral(state, ast) {
+    state.push(String(ast.extra.raw));
+  },
+  "BigIntLiteral": function parseBigIntLiteral(state, ast) {
     state.push(String(ast.extra.raw));
   },
   "ExpressionStatement": function parseExpressionStatement(state, ast) {
