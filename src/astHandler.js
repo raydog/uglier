@@ -780,9 +780,17 @@ var HANDLERS = {
     }
     if (ast.specifiers.length) {
       exportedSomething = true;
-      state.push("{");
-      descendArray(state, ast.specifiers, ",");
-      state.push("}");
+      // Ugh. Some specifiers want to be grouped via {}. Others don't.
+      const byType = _.groupBy(ast.specifiers, node => node.type === "ExportNamespaceSpecifier" ? "ns" : "other");
+      if (byType.ns) { descendArray(state, byType.ns, ","); }
+      if (byType.other) {
+        if (byType.ns) {
+          state.push(",");
+        }
+        state.push("{");
+        descendArray(state, byType.other, ",");
+        state.push("}");
+      }
     }
     if (ast.source) {
       exportedSomething = true;
@@ -800,6 +808,10 @@ var HANDLERS = {
   "ExportSpecifier": function parseExportSpecifier(state, ast) {
     descend(state, ast.local);
     state.push("as");
+    descend(state, ast.exported);
+  },
+  "ExportNamespaceSpecifier": function parseExportNamespaceSpecifier(state, ast) {
+    state.push("*", "as");
     descend(state, ast.exported);
   },
   "ExportDefaultDeclaration": function parseExportDefaultDeclaration(state, ast) {

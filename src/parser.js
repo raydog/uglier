@@ -27,6 +27,7 @@ function parseJS(text) {
         "doExpressions",
         "dynamicImport",
         "exportExtensions",
+        "exportNamespaceFrom",
         "flow",
         "functionBind",
         "functionSent",
