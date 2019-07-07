@@ -497,7 +497,7 @@ var HANDLERS = {
   },
   "UnaryExpression": function parseUnaryExpression(state, ast) {
     // AFAIK, the two postfix unary expressions in JS are parsed by
-    // babylon as UpdateExpressions, so this should be impossible:
+    // babel/parser as UpdateExpressions, so this should be impossible:
     _assertOrUnknown(ast.prefix, ast);
     
     state.push("(", ast.operator);
