@@ -357,6 +357,9 @@ var HANDLERS = {
     }
     descend(state, ast.body);
   },
+  "ArgumentPlaceholder": function parseArgumentPlaceholder(state, ast) {
+    state.push("?");
+  },
   
 
   "Decorator": function parseDecorator(state, ast) {
