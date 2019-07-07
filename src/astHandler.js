@@ -556,6 +556,17 @@ var HANDLERS = {
       descend(state, ast.property);
     }
   },
+  "OptionalMemberExpression": function parseOptionalMemberExpression(state, ast) {
+    descend(state, ast.object);
+    state.push("?.");
+    if (ast.computed) {
+      state.push("[");
+      descend(state, ast.property);
+      state.push("]");
+    } else {
+      descend(state, ast.property);
+    }
+  },
   "BindExpression": function parseBindExpression(state, ast) {
     if (ast.object) {
       descend(state, ast.object);
@@ -575,6 +586,12 @@ var HANDLERS = {
   "CallExpression": function parseCallExpression(state, ast) {
     descendMaybeParens(state, ast.callee);
     state.push("(");
+    descendArray(state, ast.arguments, ",");
+    state.push(")");
+  },
+  "OptionalCallExpression": function parseOptionalCallExpression(state, ast) {
+    descendMaybeParens(state, ast.callee);
+    state.push("?.", "(");
     descendArray(state, ast.arguments, ",");
     state.push(")");
   },
