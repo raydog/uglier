@@ -150,10 +150,10 @@ var HANDLERS = {
     state.push(ast.value ? "true" : "false");
   },
   "NumericLiteral": function parseNumericLiteral(state, ast) {
-    state.push(String(ast.extra.raw));
+    state.push(_numLiteral(ast.extra.raw));
   },
   "BigIntLiteral": function parseBigIntLiteral(state, ast) {
-    state.push(String(ast.extra.raw));
+    state.push(_numLiteral(ast.extra.raw));
   },
   "ExpressionStatement": function parseExpressionStatement(state, ast) {
     // TODO: Needs parens only if top-level, and string:
@@ -1153,6 +1153,11 @@ function _unknownASTLog(ast) {
 function _stringLiteral(str) {
   str = String(str);
   return "'" + str.replace(/[\x00-\x1f"'\\\b\f\n\r\t\u2028\u2029\v]/g, _replaceChar) + "'";
+}
+
+function _numLiteral(val) {
+  // Drop the spacing chars, because we're jerks:
+  return String(val).replace(/_/g, "");
 }
 
 function _replaceChar(ch) {
