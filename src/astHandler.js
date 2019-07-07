@@ -129,13 +129,22 @@ var HANDLERS = {
     }
   },
   "Identifier": function parseIdentifier(state, ast) {
-    state.push(ast.name);
+    if (ast._private) {
+      state.push("#" + ast.name);
+    } else {
+      state.push(ast.name);
+    }
     if (ast.optional) {
       state.push("?");
     }
     if (ast.typeAnnotation) {
       descend(state, ast.typeAnnotation);
     }
+  },
+  "PrivateName": function parsePrivateName(state, ast) {
+    // Hate to mutate AST, but spaces not allowed between # and id, so:
+    ast.id._private = true;
+    descend(state, ast.id);
   },
   "RegExpLiteral": function parseRegExpLiteral(state, ast) {
     state.push('/' + ast.pattern +'/' + ast.flags);
@@ -690,6 +699,14 @@ var HANDLERS = {
       descend(state, ast.value);
     }
     state.push(";");
+  },
+  "ClassPrivateProperty": function parseClassPrivateProperty(state, ast) {
+    // Alias:
+    HANDLERS.ClassProperty(state, ast);
+  },
+  "ClassPrivateMethod": function parseClassPrivateMethod(state, ast) {
+    // Alias:
+    HANDLERS.ClassMethod(state, ast);
   },
   "ClassDeclaration": function parseClassDeclaration(state, ast) {
     // _unknownASTLog(ast);
