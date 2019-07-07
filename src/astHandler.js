@@ -458,10 +458,6 @@ var HANDLERS = {
       }
     }
   },
-  "SpreadProperty": function parseSpreadProperty(state, ast) {
-    state.push("...");
-    descend(state, ast.argument);
-  },
   "ObjectMethod": function parseObjectMethod(state, ast) {
     _assertOrUnknown(!ast.id, ast);
     _assertOrUnknown(!ast.static, ast);
@@ -650,10 +646,6 @@ var HANDLERS = {
     if (ast.typeAnnotation) {
       descend(state, ast.typeAnnotation);
     }
-  },
-  "RestProperty": function parseRestProperty(state, ast) {
-    state.push("...");
-    descend(state, ast.argument);
   },
   "AssignmentPattern": function parseAssignmentPattern(state, ast) {
     descend(state, ast.left);
@@ -878,13 +870,9 @@ var HANDLERS = {
 
   // Flow Syntax:
   "TypeAnnotation": function parseTypeAnnotation(state, ast) {
+    _assertOrUnknown(ast.typeAnnotation, ast);
     state.push(":");
-    if (ast.typeAnnotation) {
-      descend(state, ast.typeAnnotation);
-    }
-    if (ast.predicate) {
-      descend(state, ast.predicate);
-    }
+    descend(state, ast.typeAnnotation);
   },
   "DeclaredPredicate": function parseDeclaredPredicate(state, ast) {
     state.push("%checks");
@@ -997,9 +985,7 @@ var HANDLERS = {
     state.push(")");
   },
   "FunctionTypeAnnotation_DotHack": function parseFunctionTypeAnnotation(state, ast) {
-    if (!ast.returnType) {
-      _unknownASTLog(ast);
-    }
+    _assertOrUnknown(ast.returnType, ast);
     if (ast.typeParameters) {
       descend(state, ast.typeParameters);
     }
