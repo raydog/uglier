@@ -24,16 +24,28 @@ function parseJS(text) {
         "asyncGenerators",
         "bigInt",
         "classProperties",
+        "classPrivateProperties",
+        "classPrivateMethods",
         ["decorators", { decoratorsBeforeExport: true }],
         "doExpressions",
         "dynamicImport",
-        "exportExtensions",
+        "exportDefaultFrom",
         "exportNamespaceFrom",
         "flow",
         "functionBind",
         "functionSent",
+        "importMeta",
         // "jsx", // << TODO....
+        "logicalAssignment",
+        "nullishCoalescingOperator",
+        "numericSeparator",
         "objectRestSpread",
+        "optionalCatchBinding",
+        "optionalChaining",
+        "partialApplication",
+        // "pipelineOperator", // << Proposal under debate
+        "throwExpressions",
+
       ]
     });
     return out;
