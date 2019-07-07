@@ -67,6 +67,7 @@ const SIMPLE_TYPES = {
   BooleanLiteral: 1,
   NumericLiteral: 1,
   Super: 1,
+  Import: 1,
   ThisExpression: 1,
 };
 function descendMaybeParens(state, ast) {
@@ -719,6 +720,9 @@ var HANDLERS = {
     descend(state, ast.meta);
     state.push(".");
     descend(state, ast.property);
+  },
+  "Import": function parseImport(state, ast) {
+    state.push("import");
   },
   "ImportDeclaration": function parseImportDeclaration(state, ast) {
     state.push("import");
