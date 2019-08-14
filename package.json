@@ -23,14 +23,14 @@
   "license": "MIT",
   "repository": "git@github.com:raydog/uglier.git",
   "dependencies": {
-    "@babel/parser": "7.5.0",
+    "@babel/parser": "7.5.5",
     "chalk": "2.4.2",
     "globby": "10.0.1",
-    "lodash": "4.17.11"
+    "lodash": "4.17.15"
   },
   "devDependencies": {
-    "ava": "2.1.0",
-    "coveralls": "3.0.4",
+    "ava": "2.2.0",
+    "coveralls": "3.0.6",
     "nyc": "14.1.1",
     "temp": "0.9.0"
   },
