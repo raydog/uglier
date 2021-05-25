@@ -36,7 +36,7 @@ test("Parses more patterns",  argvTest, ["-o", "src/**/*.js"],  { patterns:["src
 test("Rejects -x without a value", function (t) {
   t.throws(
     () => new Config().loadArgv(ARGV_BASE.concat(["-x"])),
-    /needs a glob to exclude/i
+    { message: /needs a glob to exclude/i }
   );
 });
 

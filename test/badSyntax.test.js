@@ -5,14 +5,14 @@ const parser = require('../src/parser');
 test("Throws on a null AST", function (t) {
   t.throws(
     () => astHandler.gurgitateAST(null),
-    /Unknown AST Node.*null/i
+    { message: /Unknown AST Node.*null/i }
   );
 });
 
 test("Throws on an unknown AST", function (t) {
   t.throws(
     () => astHandler.gurgitateAST({ type: "DerpityNode" }),
-    /Unknown AST Node.*derpitynode/i
+    { message: /Unknown AST Node.*derpitynode/i }
   );
 });
 
@@ -25,7 +25,7 @@ test("Pretty prints bad syntax from parser", function (t) {
   `;
   t.throws(
     () => parser.parseJS(bad_syntax),
-    /Failed to parse JS code/i
+    { message: /Failed to parse JS code/i }
   );
 });
 
