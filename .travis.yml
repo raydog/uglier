@@ -1,7 +1,12 @@
+os:
+  - linux
+  - osx
+dist:
+  - xenial
 language: node_js
 node_js:
-  - "8"
+  - "node"
+  - "lts/*"
   - "10"
-  - "12"
 after_success:
   - "npm run coveralls"

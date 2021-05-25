@@ -1,6 +1,6 @@
 # Uglier
 
-[![Build Status](https://travis-ci.org/raydog/uglier.svg?branch=master)](https://travis-ci.org/raydog/uglier) [![Coverage Status](https://coveralls.io/repos/github/raydog/uglier/badge.svg?branch=master)](https://coveralls.io/github/raydog/uglier?branch=master) [![NPM Version](https://img.shields.io/npm/v/uglier.svg)](https://www.npmjs.com/package/uglier)
+[![Build Status](https://travis-ci.com/raydog/uglier.svg?branch=master)](https://travis-ci.com/raydog/uglier) [![Coverage Status](https://coveralls.io/repos/github/raydog/uglier/badge.svg?branch=master)](https://coveralls.io/github/raydog/uglier?branch=master) [![NPM Version](https://img.shields.io/npm/v/uglier.svg)](https://www.npmjs.com/package/uglier)
 
 Uglier is a super simple tool that takes modern JS and makes it objectively worse.
 
